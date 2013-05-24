@@ -27,7 +27,8 @@ c.on('stanza', function (stanza) {
         delete stanza.attrs.from;
         // …and send back.
         c.send(stanza);
-        console.log("MESSAGE IS:", stanza.getChild('body').getText());
+        var body = stanza.getChild('body');
+        if (body) console.log("MESSAGE IS:", body.getText());
     }
 });
 c.on('error', function (e) {
