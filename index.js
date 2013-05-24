@@ -2,13 +2,21 @@ var xmpp = require('node-xmpp');
 
 // right now just copy-pasta from https://github.com/astro/node-xmpp/blob/master/examples/echo_bot.js
 
-var c = new xmpp.Client({jid:process.argv[2], password:process.argv[3]});
+var jid = process.argv[2],
+    pwd = process.argv[3];
+
+var c = new xmpp.Client({jid:jid+"/test321", password:pwd});
 
 c.on('online', function () {
     console.log("online")
     c.send(new xmpp.Element('presence', {})
 		  .c('show').t('chat').up()
 		  .c('status').t('Happily echoing your <message/> stanzas'));
+    
+    var jidr = jid + "/testing123";
+    c.send(new xmpp.Element('iq', {type:'set', from:jidr, to:"firehoser.superfeedr.com", id:'testing123'})
+        .c('pubsub', {xmlns:"http://jabber.org/protocol/pubsub", 'xmlns:superfeedr':"http://superfeedr.com/xmpp-pubsub-ext"})
+            .c('subscribe', {node:"http://push-pub.appspot.com/feed", jid:jidr}));
 });
 
 c.on('offline', function () {
@@ -16,7 +24,7 @@ c.on('offline', function () {
 });
 
 c.on('stanza', function (stanza) {
-    console.log(stanza.toString());
+    console.log(stanza.toString(), "\n");
     
     if (stanza.is('presence') && stanza.attrs.type === 'subscribe') {
         // via http://stackoverflow.com/questions/9505949/authorization-request-add-to-roster-using-strophe-js
