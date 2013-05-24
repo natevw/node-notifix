@@ -11,8 +11,12 @@ c.on('online', function () {
 		  .c('status').t('Happily echoing your <message/> stanzas'));
 });
 
+c.on('offline', function () {
+    console.log("offline");
+});
+
 c.on('stanza', function (stanza) {
-    console.log("stanza", stanza);
+    console.log(stanza.toString());
     
     if (stanza.is('presence') && stanza.attrs.type === 'subscribe') {
         // via http://stackoverflow.com/questions/9505949/authorization-request-add-to-roster-using-strophe-js
@@ -23,6 +27,7 @@ c.on('stanza', function (stanza) {
         delete stanza.attrs.from;
         // …and send back.
         c.send(stanza);
+        console.log("MESSAGE IS:", stanza.getChild('body').getText());
     }
 });
 c.on('error', function (e) {
