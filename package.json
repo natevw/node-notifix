@@ -12,5 +12,8 @@
   },
   "author": "Nathan Vander Wilt",
   "license": "BSD",
-  "readmeFilename": "README.md"
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "node-xmpp": "~0.4.2"
+  }
 }
