@@ -5,7 +5,7 @@ var xmpp = require('node-xmpp');
 var jid = process.argv[2],
     pwd = process.argv[3];
 
-var c = new xmpp.Client({jid:jid+"/test321", password:pwd});
+var c = new xmpp.Client({jid:jid, password:pwd});
 
 c.on('online', function () {
     console.log("online")
@@ -13,10 +13,9 @@ c.on('online', function () {
 		  .c('show').t('chat').up()
 		  .c('status').t('Happily echoing your <message/> stanzas'));
     
-    var jidr = jid + "/testing123";
-    c.send(new xmpp.Element('iq', {type:'set', from:jidr, to:"firehoser.superfeedr.com", id:'testing123'})
+    c.send(new xmpp.Element('iq', {type:'set', from:jid, to:"firehoser.superfeedr.com", id:'testing123'})
         .c('pubsub', {xmlns:"http://jabber.org/protocol/pubsub", 'xmlns:superfeedr':"http://superfeedr.com/xmpp-pubsub-ext"})
-            .c('subscribe', {node:"http://push-pub.appspot.com/feed", jid:jidr}));
+            .c('subscribe', {node:"http://push-pub.appspot.com/feed#notifix-"+encodeURIComponent(jid), jid:jid}));
 });
 
 c.on('offline', function () {
